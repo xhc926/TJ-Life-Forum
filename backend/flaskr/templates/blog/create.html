@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %}New Post{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<form method="post" action="{{ url_for('blog.create') }}">
+    <label for="forum_id">Select Forum</label>
+    <select name="forum_id" id="forum_id" required>
+        <option value disabled selected>Select a forum</option>
+        {% for forum in forums %}
+        <option value="{{ forum['forum_id'] }}">{{ forum['forum_name']
+            }}</option>
+        {% endfor %}
+    </select>
+    <br>
+
+    <label for="title">Title</label>
+    <input name="title" id="title" value="{{ request.form.get('title', '') }}"
+        required>
+    <br>
+
+    <label for="body">Body</label>
+    <textarea name="body"
+        id="body">{{ request.form.get('body', '') }}</textarea>
+    <br>
+
+    <!-- 标签选择部分 -->
+    <label>选择标签:</label><br>
+    {% for tag in tags %}
+    <input type="checkbox" name="selected_tags" value="{{ tag['id'] }}"
+        {% if tag['id'] in post_tags %} checked {% endif %}>
+    {{ tag['name'] }}<br>
+    {% endfor %}
+
+    <!-- 单一的提交按钮 -->
+    <button type="submit">保存帖子及标签</button>
+</form>
+{% endblock %}

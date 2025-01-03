@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+
+<!-- TODO: 请使用你的前端设计文件，调整该页面的整体布局 -->
+{% block header %}
+<h1><a href="{{ url_for('blog.index') }}">home</a>
+    >> <a href="{{ url_for('blog.forum', forum_id=post['forum_id']) }}">{{
+        post['forum_name'] }}</a>
+    >> <a href="{{ url_for('blog.topic', topic_id=post['topic_id']) }}">{{
+        post['topic_name']}}</a></h1>
+{% endblock %}
+
+{% block content %}
+{% if g.user['id'] %}
+<h3>请在这里发表你的评论</h3>
+<form method="post">
+    <label for="submit_rate">your rate</label>
+    <br>
+    <input name="rate" id="submit_rate" type="number"
+        value="{{ request.form['rate'] }}" required>
+    <br>
+    <label for="submit_title">Title</label>
+    <br>
+    <input name="title" id="submit_title" value="{{ request.form['title'] }}"
+        required>
+    <br>
+    <label for="submit_body">Body</label>
+    <br>
+    <textarea name="body" id="submit_body">{{ request.form['body'] }}</textarea>
+    <input type="submit" value="Save">
+</form>
+<hr>
+{% endif %}
+<article class="post">
+    <div
+        style="display: flex; justify-content: space-between; align-items: center;">
+        <h1><a href="{{ url_for('blog.entry', entry_id=post['entry_id']) }}">{{
+                post['title'] }}</a></h1>
+
+        <!-- Dropdown menu for report option -->
+        <div class="dropdown">
+            <button class="dropdown-btn">...</button>
+            <div class="dropdown-content">
+                <a href="#"
+                    onclick="openReportModal({{ post['entry_id'] }})">举报该条目</a>
+                <a href="#"
+                    onclick="openBlockModal({{ post['entry_id'] }})">屏蔽该条目</a>
+            </div>
+        </div>
+    </div>
+    <!-- Block Modal -->
+    <div id="blockModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeBlockModal()">&times;</span>
+            <h3>是否屏蔽该条目？</h3>
+            <form method="post" action="{{ url_for('blog.block_entry') }}">
+                <input type="hidden" name="entry_id" id="blockEntryId">
+                <button type="submit">确定</button>
+            </form>
+        </div>
+    </div>
+    <!-- Report Modal -->
+    <div id="reportModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeReportModal()">&times;</span>
+            <h3>举报该条目</h3>
+            <form method="post" action="{{ url_for('blog.report_entry') }}">
+                <input type="hidden" name="entry_id" id="reportEntryId">
+                <label for="reason">举报理由:</label>
+                <textarea name="reason" id="reason" required></textarea>
+                <button type="submit">提交</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 显示当前条目的标签
+    <div class="entry-tags">
+        <strong>Tags:</strong>
+        {% if entry_tags %}
+        <span class="tag">{{ entry_tags | join(', ') }}</span>
+        {% else %}
+        <span>No tags</span>
+        {% endif %}
+    </div>
+    -->
+    <!-- 显示当前条目的图片 
+    <div class="entry-images">
+        {% for image in entry_images %}
+        {% if image.entry_id == post['entry_id'] %}
+        <img src="{{ url_for('static', filename=image['image_path']) }}"
+            alt="Entry Image" class="entry-image">
+        {% endif %}
+        {% endfor %}
+    </div>
+    -->
+    <br>
+    <div class="rating-container">
+        <span class="description">{{ post['description'] }}</span>
+        <div class="stars" data-rating="{{ post['avg_rate'] }}">
+            <div class="avg-rate-container">avg_rating: {{
+                "{:.1f}".format(post['avg_rate']) }}</div>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+        </div>
+    </div>
+    <div class="about">updated on {{
+        post['updated'].strftime('%Y-%m-%d %H:%M:%S') }},
+        commented by {{ post['commented'] }} users
+    </div>
+    <p class="body">{{ post['body'] }}</p>
+    {% for comment in comments %}
+    {% if comment['entry_id']==post['entry_id'] %}
+    <div class='comment'>
+        <div
+            style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="about"> by {{ comment["username"] }}
+                on {{ comment['created'].strftime('%Y-%m-%d %H:%M:%S') }}</div>
+            <div class="dropdown">
+                <button class="dropdown-btn">...</button>
+                <div class="dropdown-content">
+                    <a href="#"
+                        onclick="openReportCommentModal({{ comment['comment_id'] }})">举报该评论</a>
+                    <a href="#"
+                        onclick="openBlockCommentModal({{ comment['comment_id'] }})">屏蔽该评论</a>
+                </div>
+            </div>
+        </div>
+        <!-- Block Modal -->
+        <div id="blockCommentModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close"
+                    onclick="closeBlockCommentModal()">&times;</span>
+                <h3>是否屏蔽该评论？</h3>
+                <form method="post"
+                    action="{{ url_for('blog.block_comment') }}">
+                    <input type="hidden" name="comment_id" id="blockCommentId">
+                    <button type="submit">确定</button>
+                </form>
+            </div>
+        </div>
+        <!-- Report Modal -->
+        <div id="reportCommentModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close"
+                    onclick="closeReportCommentModal()">&times;</span>
+                <h3>举报该评论</h3>
+                <form method="post"
+                    action="{{ url_for('blog.report_comment') }}">
+                    <input type="hidden" name="comment_id" id="reportCommentId">
+                    <label for="reason">举报理由:</label>
+                    <textarea name="reason" id="reason" required></textarea>
+                    <button type="submit">提交</button>
+                </form>
+            </div>
+        </div>
+        <div class="rating-container">
+            <div class="rating-body">
+                <h4>{{ comment['title'] }}</h4>
+                <p>{{ comment['body'] }}</p>
+            </div>
+            <div class="stars" data-rating="{{ comment['rate'] }}">
+                <div class="avg-rate-container">rating: {{ comment['rate']
+                    }}</div>
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+            </div>
+        </div>
+        <hr>
+    </div>
+    {% endif %}
+    {% endfor %}
+</article>
+<hr>
+{% endblock %}

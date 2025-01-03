@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+<!-- TODO: 请使用你的前端设计文件，调整该页面的整体布局 -->
+{% block header %}
+<h1><a href="{{ url_for('blog.index') }}">home</a> >></h1>
+{% endblock %}
+
+{% block content %}
+<!--
+<form method="get"
+    action="{{ url_for('blog.index') }}"
+    class="search-form">
+    <p>搜索条目</p>
+    <input type="text" name="keyword" placeholder="请输入关键词" value="{{ keyword }}"
+        class="search-input">
+    <br>
+    <label for="tags">选择标签:</label>
+    <div>
+        {% for tag in tags %}
+        <label>
+            <input type="checkbox" name="tag_id" value="{{ tag.id }}"
+                {% if tag.id|string in tag_ids %} checked {% endif %}> {{
+            tag.name }}
+        </label>
+        {% endfor %}
+    </div>
+    <button type="submit" class="search-button">搜索</button>
+</form>
+
+{% if keyword or tag_ids %}
+<p>搜索结果：
+    {% if keyword %}
+    包含“{{ keyword }}”
+    {% endif %}
+    {% if tag_ids %}
+    标签为：
+    {% for tag_id in tag_ids %}
+    {% set is_last = loop.index == loop.length %}
+    {% for tag in tags %}
+    {% if tag.id|string == tag_id %}
+    {{ tag.name }}
+    {% if not is_last %}, {% endif %}
+    {% endif %}
+    {% endfor %}
+    {% endfor %}
+    的条目
+    {% endif %}
+</p>
+{% endif %}
+ 按热度排序按钮 
+<form method="get" action="{{ url_for('blog.index') }}">
+    <input type="hidden" name="sort_by_hotness" value="1">
+    <button type="submit" {% if sort_by_hotness == '1' %}disabled{% endif
+        %}>按热度排序</button>
+</form>
+
+ 按时间排序按钮 
+<form method="get" action="{{ url_for('blog.index') }}">
+    <input type="hidden" name="sort_by_hotness" value="0">
+    <button type="submit" {% if sort_by_hotness == '0' %}disabled{% endif
+        %}>按时间排序</button>
+</form>
+-->
+{% for post in posts %}
+<article class="post">
+    <div
+        style="display: flex; justify-content: space-between; align-items: center;">
+        <h1><a href="{{ url_for('blog.forum', forum_id=post['forum_id']) }}">{{
+                post['forum_name'] }}</a>
+            >> <a
+                href="{{ url_for('blog.topic', topic_id=post['topic_id']) }}">{{
+                post['topic_name'] }}</a>
+            >> <a
+                href="{{ url_for('blog.entry', entry_id=post['entry_id']) }}">{{
+                post['title'] }}</a></h1>
+        <div class="dropdown">
+            <button class="dropdown-btn">...</button>
+            <div class="dropdown-content">
+                <a href="#"
+                    onclick="openReportModal({{ post['entry_id'] }})">举报该条目</a>
+                <a href="#"
+                    onclick="openBlockModal({{ post['entry_id'] }})">屏蔽该条目</a>
+            </div>
+        </div>
+    </div>
+    <!-- Block Modal -->
+    <div id="blockModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeBlockModal()">&times;</span>
+            <h3>是否屏蔽该条目？</h3>
+            <form method="post" action="{{ url_for('blog.block_entry') }}">
+                <input type="hidden" name="entry_id" id="blockEntryId">
+                <button type="submit">确定</button>
+            </form>
+        </div>
+    </div>
+    <!-- Report Modal -->
+    <div id="reportModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeReportModal()">&times;</span>
+            <h3>举报该条目</h3>
+            <form method="post" action="{{ url_for('blog.report_entry') }}">
+                <input type="hidden" name="entry_id" id="reportEntryId">
+                <label for="reason">举报理由:</label>
+                <textarea name="reason" id="reason" required></textarea>
+                <button type="submit">提交</button>
+            </form>
+        </div>
+    </div>
+    <br>
+    <div class="rating-container">
+        <span class="description">{{ post['description'] }}</span>
+        <div class="stars" data-rating="{{ post['avg_rate'] }}">
+            <div class="avg-rate-container">avg_rating: {{
+                "{:.1f}".format(post['avg_rate']) }}</div>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+        </div>
+    </div>
+    <div class="about">updated on {{
+        post['updated'].strftime('%Y-%m-%d %H:%M:%S') }},
+        <<<<<<< HEAD
+        commented by {{ post['commented'] }} users
+        =======
+        commented by {{ post['commented'] }} users,
+        viewed {{post['views']}} times
+        >>>>>>> loginFront
+    </div>
+    <!-- 显示标签 -->
+    <div class="tags">
+        <strong>Tags:</strong>
+        {% if post['entry_id'] in entry_tags and entry_tags[post['entry_id']] %}
+        <span class="tag">{{ entry_tags[post['entry_id']] | join(', ') }}</span>
+        {% else %}
+        <span>No tags</span>
+        {% endif %}
+    </div>
+    <<<<<<< HEAD
+    =======
+    <!-- 显示图片 -->
+    <div class="images">
+        {% for image_path in entry_images[post['entry_id']] %}
+        <img src="{{ url_for('static', filename=image_path) }}" alt="Post Image"
+            class="post-image" />
+        {% endfor %}
+    </div>
+
+    <!-- 显示评论数量 -->
+    <div class="comments-count">
+        Comments: {{ comments|selectattr('entry_id', 'equalto',
+        post['entry_id'])|list|length }}
+    </div>
+    >>>>>>> loginFront
+    <p class="body">{{ post['body'] }}</p>
+    {% for comment in comments %}
+    {% if comment['entry_id']==post['entry_id'] %}
+    <div class='comment'>
+        <div
+            style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="about"> by {{ comment["username"] }}
+                on {{ comment['created'].strftime('%Y-%m-%d %H:%M:%S') }}</div>
+            <div class="dropdown">
+                <button class="dropdown-btn">...</button>
+                <div class="dropdown-content">
+                    <a href="#"
+                        onclick="openReportCommentModal({{ comment['comment_id'] }})">举报该评论</a>
+                    <a href="#"
+                        onclick="openBlockCommentModal({{ comment['comment_id'] }})">屏蔽该评论</a>
+                </div>
+            </div>
+        </div>
+        <!-- Block Modal -->
+        <div id="blockCommentModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close"
+                    onclick="closeBlockCommentModal()">&times;</span>
+                <h3>是否屏蔽该评论？</h3>
+                <form method="post"
+                    action="{{ url_for('blog.block_comment') }}">
+                    <input type="hidden" name="comment_id" id="blockCommentId">
+                    <button type="submit">确定</button>
+                </form>
+            </div>
+        </div>
+        <!-- Report Modal -->
+        <div id="reportCommentModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close"
+                    onclick="closeReportCommentModal()">&times;</span>
+                <h3>举报该评论</h3>
+                <form method="post"
+                    action="{{ url_for('blog.report_comment') }}">
+                    <input type="hidden" name="comment_id" id="reportCommentId">
+                    <label for="reason">举报理由:</label>
+                    <textarea name="reason" id="reason" required></textarea>
+                    <button type="submit">提交</button>
+                </form>
+            </div>
+        </div>
+        <div class="rating-container">
+            <div class="rating-body">
+                <h4>{{ comment['title'] }}</h4>
+                <p>{{ comment['body'] }}</p>
+            </div>
+            <div class="stars" data-rating="{{ comment['rate'] }}">
+                <div class="avg-rate-container">rating: {{ comment['rate']
+                    }}</div>
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+            </div>
+        </div>
+        <hr>
+    </div>
+    {% endif %}
+    {% endfor %}
+</article>
+{% if not loop.last %}
+<hr>
+{% endif %}
+{% endfor %}
+{% endblock %}

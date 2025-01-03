@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Personal Profile</h1>
+<p><strong>uid:</strong> {{ user['id'] }}</p>
+<p>
+    <strong>Username:</strong> {{ user['username'] }}
+    <button id="edit-username-btn" style="margin-left: 10px;">修改用户名</button>
+
+    <form id="username-form" action="{{ url_for('profile.update_username') }}"
+        method="post" style="display: inline;">
+        <input type="text" name="new_username" id="new_username"
+            placeholder="New Username" required style="display: none;">
+        <button type="submit" id="submit-username-btn"
+            style="display: none;">Update</button>
+    </form>
+</p>
+<p><strong>email:</strong> {{ user['email'] }}</p>
+
+<!-- 返回主页链接 -->
+<a href="{{ url_for('index') }}">返回主页</a>
+
+<!-- 修改密码链接 -->
+<a href="{{ url_for('auth.verify_forgot_password') }}">修改密码</a>
+
+<!-- 修改邮箱链接 -->
+<a href="{{url_for('profile.update_email')}}">修改邮箱</a>
+
+<!-- 查看历史记录 -->
+<a href="{{url_for('profile.view_records')}}">查看历史记录</a>
+
+<form action="{{ url_for('profile.upload_avatar') }}" method="post"
+    enctype="multipart/form-data">
+    <label for="avatar">Choose a new avatar:</label>
+    <input type="file" name="avatar" id="avatar" accept="image/*">
+    <button type="submit">Upload</button>
+</form>
+<!-- 加载用户头像 -->
+{% if g.user.avatar %}
+<img src="{{ url_for('static', filename=g.user.avatar) }}" alt="User Avatar"
+    class="user-avatar">
+{% else %}
+<img src="{{ url_for('static', filename='uploads/avatars/default.png') }}"
+    alt="Default Avatar" class="user-avatar">
+{% endif %}
+
+<script>
+// JavaScript 用于控制表单的显示和隐藏
+document.getElementById("edit-username-btn").addEventListener("click", function() {
+    var inputField = document.getElementById("new_username");
+    var submitButton = document.getElementById("submit-username-btn");
+
+    // 切换输入框和提交按钮的显示状态
+    inputField.style.display = inputField.style.display === "none" ? "inline-block" : "none";
+    submitButton.style.display = submitButton.style.display === "none" ? "inline-block" : "none";
+
+    // 将焦点移到输入框
+    inputField.focus();
+});
+</script>
+
+<h2>用户标签</h2>
+
+<form id="tag-form" action="{{ url_for('profile.update_tags') }}" method="post">
+    <label>选择标签:</label><br>
+    {% for tag in tags %}
+    <input type="checkbox" name="selected_tags" value="{{ tag['id'] }}"
+        {% if tag['id'] in user_tags %} checked {% endif %}>
+    {{ tag['name'] }}<br>
+    {% endfor %}
+    <button type="submit">更新标签</button>
+</form>
+
+{% endblock %}

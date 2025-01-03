@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block header %}
+    <h1> admin >> report</h1>
+{% endblock %}
+
+{% block content %}
+<li><a href="{{url_for('auth.admin_dashboard')}}">返回管理员主页</a></li>
+    {% for report in reports %}
+    <p>{{ report['report_id'] }}  |  {{ report['username'] }}  | {{ report['forum_name'] }} >> {{ report['topic_name'] }} >> {{ report['title'] }}</p>
+        <p>reporter: {{ report['username'] }}</p>
+        <p>reason: {{ report['reason'] }}</p>
+        <p>status:
+            {% if report['report_status'] == 0 %}
+                pending
+            {% elif report['report_status'] == 1 %}
+                accept
+            {% elif report['report_status'] == 2 %}
+                reject
+            {% elif report['report_status'] == 3 %}
+                error
+            {% endif %}
+        </p>
+        <div>
+            <form method="post" action="{{ url_for('admin.accept_report', report_id=report['report_id']) }}">
+                <button type="submit" {% if report['report_status'] != 0 %}disabled{% endif %}>Accept</button>
+            </form>
+            <form method="post" action="{{ url_for('admin.reject_report', report_id=report['report_id']) }}">
+                <button type="submit" {% if report['report_status'] != 0 %}disabled{% endif %}>Reject</button>
+            </form>
+        </div>
+        <hr>
+    {% endfor %}
+{% endblock %}

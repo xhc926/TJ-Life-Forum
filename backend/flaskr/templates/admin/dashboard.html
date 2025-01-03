@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block header %}
+<h1>Welcome to the Admin Dashboard!</h1>
+{% endblock %}
+
+{% block content %}
+        <p>Only accessible to administrators.</p>
+
+        <!-- 管理员操作 -->
+        <ul>
+            <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+            <!-- 可以在这里添加更多的管理员操作链接 -->
+            <li><a href="{{url_for('admin.apply_form')}}">查看用户提交的条目申请</a></li>
+            <li><a href="{{url_for('admin.report_entry')}}">查看用户举报的条目</a></li>
+            <li><a href="{{url_for('admin.report_comment')}}">查看用户举报的评论</a></li>
+        </ul>
+{% endblock %}

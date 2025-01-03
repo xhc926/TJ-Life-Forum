@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+<!-- TODO: 请使用你的前端设计文件，调整该页面的整体布局 -->
+{% block header %}
+<h1>{% block title %}Edit "{{ post['title'] }}"{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<form method="post">
+    <label for="title">Title</label>
+    <input name="title" id="title" value="{{ post['title'] }}" required>
+
+    <label for="body">Body</label>
+    <textarea name="body" id="body">{{ post['body'] }}</textarea>
+
+    <!-- 标签选择部分 -->
+    <label>选择标签:</label><br>
+    {% for tag in all_tags %}
+    <input type="checkbox" name="selected_tags" value="{{ tag['id'] }}"
+        {% if tag['id'] in current_tags %} checked {% endif %}>
+    {{ tag['name'] }}<br>
+    {% endfor %}
+
+    <button type="submit">保存帖子及标签</button>
+</form>
+
+{% endblock %}

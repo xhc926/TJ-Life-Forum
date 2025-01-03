@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='info.css') }}">
+{% endblock %}
+{% block content %}
+<div class="container">
+        <!-- 用户信息 -->
+        <div class="user-info">
+            <h2>用户信息</h2>
+            <p>用户名：<span id="username">{{ user['username'] }}</span></p>
+            <p>用户 ID：<span id="user-id">{{ user['id'] }}</span></p>
+        </div>
+
+        <!-- 选项卡 -->
+        <div class="tabs">
+            <button class="tab-button" onclick="switchTab('account-info')">账号信息</button>
+            <button class="tab-button" onclick="switchTab('posts')">发帖记录</button>
+            <button class="tab-button" onclick="switchTab('comments')">评论记录</button>
+        </div>
+
+        <!-- 内容部分 -->
+        <div id="account-info" class="tab-content active">
+            <h3>账号信息管理</h3>
+            <p>绑定邮箱：<span>{{ user['email'] }}</span></p>
+            <p>注册时间：<span>{{ user['registered'] }}</span></p>
+            <button onclick="openModal('reset-username')">重设用户名</button>
+            <button onclick="openModal('reset-password')">重设密码</button>
+        </div>
+
+        <div id="posts" class="tab-content">
+            <h3>申请记录</h3>
+            <div id="post-list">
+                {% for post in posts %}
+                <div class="post">
+                    <p>标题：{{ post['entry_name'] }}</p>
+                    <p>描述：{{ post['description'] }}</p>
+                    <p>状态：{{ post['apply_status'] }}</p>
+                    <p>时间：{{ post['created'].strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                </div>
+                {% endfor %}
+                <div class="pagination">
+                    {% for page in pages %}
+                    <button onclick="loadPage({{ page }})">{{ page }}</button>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div id="comments" class="tab-content">
+            <h3>评论记录</h3>
+            <div id="comment-list">
+                {% for comment in comments %}
+                <div class="comment">
+                    <p>内容：{{ comment['body'] }}</p>
+                    <p>时间：{{ comment['created'].strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                </div>
+                {% endfor %}
+                <div class="pagination">
+                    {% for page in pages %}
+                    <button onclick="loadPage({{ page }})">{{ page }}</button>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 模态框 -->
+    <div id="modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="reset-username-form" style="display: none;">
+                <h3>重设用户名</h3>
+                <form method="post" action="{{ url_for('auth.reset_username') }}">
+                    <input type="text" name="new_username" placeholder="新用户名" required>
+                    <button type="submit">提交</button>
+                </form>
+            </div>
+            <div id="reset-password-form" style="display: none;">
+                <h3>重设密码</h3>
+                <form method="post" action="{{ url_for('auth.reset_password') }}">
+                    <input type="password" name="new_password" placeholder="新密码" required>
+                    <button type="submit">提交</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock%}

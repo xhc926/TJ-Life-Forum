@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Update Email</h2>
+
+<!-- 邮箱输入阶段 -->
+<div id="email-input-section" style="display: block;">
+    <form method="post" id="email-form">
+        <label for="new_email">New Email:</label>
+        <input type="text" name="new_email" id="new_email"
+            placeholder="Enter new email" required>
+        <button type="submit">Send Verification Codes</button>
+    </form>
+</div>
+
+<!-- 验证码输入阶段 -->
+<div id="verification-section" style="display: none;">
+    <form method="post" id="verification-form">
+        <label for="this_verification_code">Old Email Verification Code:</label>
+        <input type="text" name="this_verification_code"
+            id="this_verification_code" required>
+
+        <label for="new_verification_code">New Email Verification Code:</label>
+        <input type="text" name="new_verification_code"
+            id="new_verification_code" required>
+
+        <button type="submit">Verify and Update Email</button>
+    </form>
+</div>
+
+<script>
+// JavaScript 控制表单显示和隐藏
+document.getElementById('email-form').addEventListener('submit', function(event) {
+    event.preventDefault();  // 防止表单提交，模拟动态切换
+    var newEmail = document.getElementById('new_email').value;
+
+    if (newEmail) {
+        fetch('{{ url_for("profile.update_email") }}', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: new URLSearchParams({'new_email': newEmail})
+        }).then(response => {
+            if (response.ok) {  // 确认响应成功
+                document.getElementById('email-input-section').style.display = 'none';
+                document.getElementById('verification-section').style.display = 'block';
+            } else {
+                console.error("Failed to send verification codes.");
+            }
+        }).catch(error => console.log("Fetch error:", error));
+    }
+});
+</script>
+
+{% endblock %}

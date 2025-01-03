@@ -1,0 +1,38 @@
+.container {
+    margin: 20px auto;
+    width: 80%;
+    max-width: 800px;
+    font-family: Arial, sans-serif;
+}
+
+.user-info, .tabs, .tab-content, .modal-content {
+    margin: 20px 0;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 300px;
+    text-align: center;
+}
