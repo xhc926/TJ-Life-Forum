@@ -16,13 +16,13 @@ session_dir = os.path.join(base_dir, '..', 'flask_session')
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
-    CORS(app, origins=["http://localhost:5173"], supports_credentials=True)  # 允许跨域
+    CORS(app, origins=["http://113.44.59.183"], supports_credentials=True)  # 允许跨域
     app.config.from_mapping(
         SECRET_KEY='aovdnfdp',
         SESSION_COOKIE_HTTPONLY=True,
         SESSION_COOKIE_SECURE=False,
         SESSION_PERMANENT=False,
-        SESSION_COOKIE_DOMAIN='.localhost',
+        SESSION_COOKIE_DOMAIN='.113.44.59.183',
         SESSION_COOKIE_SAMESITE=None,
         SESSION_COOKIE_PATH='/',
         SESSION_FILE_DIR=session_dir,

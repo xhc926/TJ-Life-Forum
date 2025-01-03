@@ -327,7 +327,7 @@ export default {
                 if (response.data.status === "success") {
                     if (this.loginUser.name == "admin") {
                         // 跳转到管理员页面
-                        window.location.replace('http://localhost:5000/auth/admin_dashboard');
+                        window.location.replace('http://113.44.59.183:5000/auth/admin_dashboard');
                     } else {
                         // 跳转到普通用户页面
                         this.$router.push('/');

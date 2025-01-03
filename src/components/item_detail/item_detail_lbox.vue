@@ -283,7 +283,7 @@ export default {
 
     const handleBlockConfirm = async (comment_id) => {
       try {
-        const response = await axios.get("http://localhost:5000/profile/", {
+        const response = await axios.get("http://113.44.59.183:5000/profile/", {
           withCredentials: true,
         });
         const user = response.data.user;
@@ -294,7 +294,7 @@ export default {
         }
 
         const user_id = user.id;
-          const blockResponse = await axios.post("http://localhost:5000/block_comment", {
+          const blockResponse = await axios.post("http://113.44.59.183:5000/block_comment", {
               user_id: user_id,
               comment_id: comment_id,
           }, { withCredentials: true });
@@ -312,7 +312,7 @@ export default {
 
     const handleReportConfirm = async (comment_id) => {
       try {
-        const response = await axios.get("http://localhost:5000/profile/", {
+        const response = await axios.get("http://113.44.59.183:5000/profile/", {
           withCredentials: true,
         });
         const user = response.data.user;
@@ -347,7 +347,7 @@ export default {
 
     const submitReport = async (comment_id, user_id) => {
       try {
-          const response = await axios.post("http://localhost:5000/report_comment", {
+          const response = await axios.post("http://113.44.59.183:5000/report_comment", {
               user_id,
               comment_id,
               reason: reason.value,
@@ -364,7 +364,7 @@ export default {
     };
     const handleBlockEntryConfirm = async (entry_id) => {
       try {
-        const response = await axios.get("http://localhost:5000/profile/", {
+        const response = await axios.get("http://113.44.59.183:5000/profile/", {
           withCredentials: true,
         });
         const user = response.data.user;
@@ -375,7 +375,7 @@ export default {
         }
 
         const user_id = user.id;
-          const blockResponse = await axios.post("http://localhost:5000/block_entry", {
+          const blockResponse = await axios.post("http://113.44.59.183:5000/block_entry", {
               user_id: user_id,
               entry_id: entry_id,
           }, { withCredentials: true });
@@ -393,7 +393,7 @@ export default {
 
     const handleReportEntryConfirm = async (entry_id) => {
       try {
-        const response = await axios.get("http://localhost:5000/profile/", {
+        const response = await axios.get("http://113.44.59.183:5000/profile/", {
           withCredentials: true,
         });
         const user = response.data.user;
@@ -428,7 +428,7 @@ export default {
 
     const submitEntryReport = async (entry_id, user_id) => {
       try {
-          const response = await axios.post("http://localhost:5000/report_entry", {
+          const response = await axios.post("http://113.44.59.183:5000/report_entry", {
               user_id,
               entry_id,
               reason: reason.value,

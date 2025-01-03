@@ -30,7 +30,7 @@
       <div class="user">
         <!-- 如果用户已经登录，显示头像和退出按钮，否则显示登录链接 -->
         <template v-if="user">
-          <el-avatar class="avatar-icon" :src="user.avatar ? `http://localhost:5000/static/${user.avatar}` : defaultAvatar">user</el-avatar>
+          <el-avatar class="avatar-icon" :src="user.avatar ? `http://113.44.59.183:5000/static/${user.avatar}` : defaultAvatar">user</el-avatar>
           <el-button @click="logout" type="primary" size="small" style="margin-left: 10px;">Log out</el-button>
         </template>
         <template v-else>

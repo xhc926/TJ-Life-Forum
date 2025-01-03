@@ -14,7 +14,7 @@ import axios from 'axios'
 //import Vue from 'vue'
 
 //Vue.prototype.$axios = axios;
-axios.defaults.baseURL = 'http://localhost:5000'; // Flask 后端的基本 URL
+axios.defaults.baseURL = 'http://113.44.59.183:5000'; // Flask 后端的基本 URL
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 
