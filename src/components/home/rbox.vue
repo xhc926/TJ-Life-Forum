@@ -99,7 +99,7 @@
         <div class="links whitebg">
             <h2 class="htitle"><span class="sqlink"></span>技术相关链接</h2>
             <ul>
-                <li><a href="https://gitlab.com/tj-cs-swe/cs10102302-2024-fall/G7/forum-0.0" target="_blank">技术</a></li>
+                <li><a href="https://github.com/xhc926/TJ-Life-Forum/tree/main" target="_blank">仓库地址</a></li>
             </ul>
         </div>
     </div>
