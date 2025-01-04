@@ -25,7 +25,7 @@ CREATE TABLE user (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username VARCHAR(50) UNIQUE NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
-    password VARCHAR(50) NOT NULL,
+    password VARCHAR(255) NOT NULL,
     introduction TEXT DEFAULT '这个人很神秘~',
     user_status INTEGER DEFAULT 0,       -- ENUM(0:active, 1:inactive)
     is_verified INTEGER DEFAULT 0,
@@ -115,7 +115,7 @@ CREATE TABLE report_user(
 CREATE TABLE admin (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username VARCHAR(50) UNIQUE NOT NULL,
-    password VARCHAR(50) NOT NULL
+    password VARCHAR(255) NOT NULL
 );
 INSERT INTO admin(username, password)
 VALUES ('admin','scrypt:32768:8:1$7ktMopw8sYs2VA2F$aeb1b4c211743e1743e2720a82b71b90c033aafb68e9f75d9b3ad8804f1142d45bc8be622d09313dc9fa9a3a1cdfb8b9b6b7d95de90bc307d4f4540998a8e95c');
