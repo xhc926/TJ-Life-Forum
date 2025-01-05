@@ -94,3 +94,5 @@
    `tail -f flask_app.log`
 6. 客户端使用：  
    点击链接 [TJ Life Forum](http://113.44.59.183) 或直接访问 [http://113.44.59.183](http://113.44.59.183)
+7. 本地运行版：
+   参见[https://github.com/xhc926/TJ-Life-Forum/tree/local](https://github.com/xhc926/TJ-Life-Forum/tree/local)
